@@ -1,0 +1,40 @@
+def maximumGap(nums):
+    if len(nums) < 2:
+        return 0
+
+    # Find the maximum element in the array
+    max_num = max(nums)
+
+    # Initialize the maximum gap and the divisor
+    max_gap = 0
+    divisor = 1
+
+    # Create a list of empty buckets
+    buckets = [[] for _ in range(10)]
+
+    # Radix sort
+    while max_num // divisor > 0:
+        # Place each number into a bucket based on the current digit
+        for num in nums:
+            digit = (num // divisor) % 10
+            buckets[digit].append(num)
+
+        # Reconstruct the array from the buckets
+        nums = []
+        for bucket in buckets:
+            nums.extend(bucket)
+            bucket.clear()
+
+        # Calculate the maximum gap in this pass
+        for i in range(1, len(nums)):
+            max_gap = max(max_gap, nums[i] - nums[i - 1])
+
+        # Move to the next digit
+        divisor *= 10
+
+    return max_gap
+
+# Example usage:
+nums = [3, 6, 9, 1]
+result = maximumGap(nums)
+print(result)  # Output: 3
